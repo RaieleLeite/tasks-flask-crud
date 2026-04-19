@@ -13,12 +13,12 @@ def create_task():
     new_task = Task(id=task_id_control, title=data['title'], description=data.get("description", "")) 
     task_id_control +=1
     tasks.append(new_task)
-    return jsonify({"message": "Nova tarefa criada com sucesso"})
+    return jsonify({"message": "Nova tarefa criada com sucesso", "id": new_task.id})
 
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
-    task_list = [task.to_dict for task in tasks]
+    task_list = [task.to_dict() for task in tasks]
     
     output = {
         "tasks": task_list, 
@@ -27,7 +27,7 @@ def get_tasks():
 
     return jsonify(output)
 
-@app.route('/tasks/<int: id>', methods=['GET'])
+@app.route('/tasks/<int:id>', methods=['GET'])
 def get_task(id):
     for t in tasks:
         if t.id == id:
@@ -36,7 +36,7 @@ def get_task(id):
 
     return jsonify({"message": "Não foi possível encontrar a tividade"}), 404
 
-@app.route('/tasks/<int: id>', methods=['PUT'])
+@app.route('/tasks/<int:id>', methods=['PUT'])
 def update_task(id):
     task = None
     for t in tasks:
@@ -53,7 +53,7 @@ def update_task(id):
 
     return jsonify({"message":"Tarefa atualizada com sucesso"})
 
-@app.route('/tasks/<int: id>', methods=['DELETE'])
+@app.route('/tasks/<int:id>', methods=['DELETE'])
 def delete_task(id):
     task = None
     for t in tasks:
